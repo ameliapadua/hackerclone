@@ -1,12 +1,17 @@
-<h3><%= @post.title %></h3>
-<h4>By <%= @post.user.name %></h4>
+<h1><%= @post.title %></h1>
 
+<h3><%= link_to @post.title, @post.url %></h3>
+<p><%= @post.url %></p>
 <p><%= @post.content %></p>
 
+<%= render "./comments/form" %>
+
 <ul>
-  <% @comments.each do |comment| %>
-    <li><%= comment.content %></li>
-  <% end %>
+<% @post.comments.each do |comment| %>
+<li><%= comment.content %></li>
+<% end %>
 </ul>
 
-<%= link_to "Back to posts", posts_path %>
+<%= form_for @post,  :html => {:method => :delete} do |f|%>
+<%= f.submit "Delete Post" %>
+<% end %>

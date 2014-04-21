@@ -1,0 +1,5 @@
+<%= render "form" %>
+
+<%= form_for @user,  :html => {:method => :delete} do |f|%>
+<%= f.submit "Delete Account" %>
+<% end %>
