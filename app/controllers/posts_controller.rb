@@ -6,16 +6,24 @@ class PostsController < ApplicationController
     end
 
     def new
-      @post = Post.new
+      if current_user
+        @post = Post.new
+      else
+        redirect_to root_path
+      end
     end
 
     def create
-      @new_post = Post.new(posts_params.merge(user: current_user))
+      if current_user
+        @new_post = Post.new(posts_params.merge(user: current_user))
 
-      if @new_post.save!
-        redirect_to posts_path
+        if @new_post.save!
+          redirect_to posts_path
+        else
+          render :index
+        end
       else
-        render :index
+        redirect_to root_path
       end
     end
 
