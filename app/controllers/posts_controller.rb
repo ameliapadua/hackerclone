@@ -10,7 +10,7 @@ class PostsController < ApplicationController
     end
 
     def create
-      @new_post = Post.new(posts_params)
+      @new_post = Post.new(posts_params.merge(user: current_user))
 
       if @new_post.save!
         redirect_to posts_path
