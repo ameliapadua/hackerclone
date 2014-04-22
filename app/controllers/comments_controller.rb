@@ -1,13 +1,17 @@
 class CommentsController < ApplicationController
 
     def create
-      @post = Post.find(params[:post_id])
-      @new_comment = Comment.new(comment_params.merge(post: @post, user: current_user))
+      if current_user
+        @post = Post.find(params[:post_id])
+        @new_comment = Comment.new(comment_params.merge(post: @post, user: current_user))
 
-      if @new_comment.save!
-        redirect_to @post
+        if @new_comment.save!
+          redirect_to @post
+        else
+          render :new
+        end
       else
-        render :new
+        redirect_to root_path
       end
     end
 
@@ -22,8 +26,11 @@ class CommentsController < ApplicationController
     end
 
     def destroy
-      Comment.destroy(params[:id])
-      redirect_to @post
+      comment = Comment.find(params[:id])
+      if comment.user.id == current_user.id
+        comment.destroy
+      end
+      redirect_to comment.post
     end
 
 private
